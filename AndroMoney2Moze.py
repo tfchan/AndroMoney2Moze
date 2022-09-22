@@ -1,7 +1,20 @@
 import click
+import pandas as pd
 
 DEFAULT_ANDROMONEY_FILE = 'AndroMoney - AndroMoney.csv'
 DEFAULT_MOZE_FILE = 'MOZE.csv'
+
+
+def read_andromoney(filename: click.Path) -> pd.DataFrame:
+    return pd.read_csv(filename)
+
+
+def _andromoney2moze(andromoney: pd.DataFrame) -> pd.DataFrame:
+    pass
+
+
+def write_moze(moze: pd.DataFrame):
+    pass
 
 
 @click.command()
@@ -19,6 +32,9 @@ DEFAULT_MOZE_FILE = 'MOZE.csv'
               help='Filename of Moze formated csv')
 def andromoney2moze(input: click.Path, output: click.Path):
     """A tool for converting AndroMoney format into Moze one."""
+    andromoney = read_andromoney(input)
+    moze = _andromoney2moze(andromoney)
+    write_moze(moze)
 
 
 if __name__ == '__main__':
