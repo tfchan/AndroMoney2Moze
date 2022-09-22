@@ -6,7 +6,7 @@ DEFAULT_MOZE_FILE = 'MOZE.csv'
 
 
 def read_andromoney(filename: click.Path) -> pd.DataFrame:
-    return pd.read_csv(filename)
+    return pd.read_csv(filename, skiprows=1)
 
 
 def _andromoney2moze(andromoney: pd.DataFrame) -> pd.DataFrame:
