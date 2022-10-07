@@ -15,6 +15,7 @@ class Record:
                  date: datetime.date,
                  time: datetime.time = None,
                  shop: str = None,
+                 title: str = None,
                  detail: str = None,
                  project: str = None
                  ) -> None:
@@ -28,6 +29,7 @@ class Record:
         self.date = date
         self.time = time
         self.shop = shop
+        self.title = title
         self.detail = detail
         self.project = project
 
@@ -41,8 +43,8 @@ class Record:
                    record['Currency'],
                    [record['Category'], record['Sub-Category']],
                    datetime.datetime.strptime(record['Date'], '%Y%m%d').date,
-                   datetime.datetime.strptime(record['Time'], '%H%M').time,
-                   record['Payee/Payer'],
-                   record['Remark'],
-                   record['Project']
+                   time=datetime.datetime.strptime(record['Time'], '%H%M').time,
+                   shop=record['Payee/Payer'],
+                   detail=record['Remark'],
+                   project=record['Project']
                    )
