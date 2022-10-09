@@ -35,6 +35,9 @@ class Record:
 
     @classmethod
     def from_andromoney(cls, record: pd.Series) -> None:
+        date = datetime.datetime.strptime(f"{record['Date']}", '%Y%m%d').date
+        time = (datetime.datetime.strptime(f"{int(record['Time']):04}", '%H%M').time
+                if pd.notna(record['Time']) else None)
         return cls(record['Expense(Transfer Out)'],
                    record['Income(Transfer In)'],
                    record['Amount'],
@@ -42,8 +45,8 @@ class Record:
                    record['Currency'],
                    record['Currency'],
                    [record['Category'], record['Sub-Category']],
-                   datetime.datetime.strptime(record['Date'], '%Y%m%d').date,
-                   time=datetime.datetime.strptime(record['Time'], '%H%M').time,
+                   date,
+                   time=time,
                    shop=record['Payee/Payer'],
                    detail=record['Remark'],
                    project=record['Project']
