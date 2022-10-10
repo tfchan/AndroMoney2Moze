@@ -1,6 +1,6 @@
 import datetime
 from enum import Enum
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import pandas as pd
 
@@ -26,11 +26,23 @@ class Record:
     title: str = None
     detail: str = None
     project: str = None
+    record_type: RecordType = field(init=False)
+
+    def __post_init__(self) -> None:
+        if self.from_account and not self.to_account:
+            self.record_type = RecordType.EXPENSE
+        elif self.from_account and self.to_account:
+            self.record_type = RecordType.TRANSFER
+        elif self.to_account:
+            self.record_type = RecordType.INCOME
+        else:
+            raise ValueError('Invalid record type. '
+                             'Both from_account and to_account are None.')
 
     @classmethod
     def from_andromoney(cls, record: pd.Series) -> None:
-        date = datetime.datetime.strptime(f"{record['Date']}", '%Y%m%d').date
-        time = (datetime.datetime.strptime(f"{int(record['Time']):04}", '%H%M').time
+        date = pd.to_datetime(record['Date'], '%Y%m%d').date()
+        time = (pd.to_datetime(f"{int(record['Time']):04}", '%H%M').time()
                 if pd.notna(record['Time']) else None)
         return cls(record['Expense(Transfer Out)'],
                    record['Income(Transfer In)'],
