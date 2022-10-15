@@ -57,3 +57,34 @@ class Record:
                    detail=record['Remark'],
                    project=record['Project']
                    )
+
+    def to_moze(self) -> pd.DataFrame:
+        if self.record_type not in [RecordType.EXPENSE,
+                                    RecordType.INCOME,
+                                    RecordType.TRANSFER]:
+            raise ValueError(f'Do not support {self.record_type}')
+
+        record = {
+            'Account': [self.from_account, self.to_account],
+            'Currency': [self.from_currency, self.to_currency],
+            'Type': ['Expense', 'Income'],
+            'Main Category': [self.categories[0]] * 2,
+            'Subcategory': [self.categories[-1]] * 2,
+            'Price': [-self.from_amount, self.to_amount],
+            'Fee': [pd.NA] * 2,
+            'Bonus': [pd.NA] * 2,
+            'Name': [self.title] * 2,
+            'Store': [self.shop] * 2,
+            'Date': [self.date.strftime('%Y/%m/%d')] * 2,
+            'Time': [self.time.strftime('%H:%M') if self.time else pd.NA] * 2,
+            'Project': [self.project] * 2,
+            'Description': [self.detail] * 2,
+            'Tag': [pd.NA] * 2,
+            'Target': [pd.NA] * 2
+        }
+
+        if self.record_type == RecordType.TRANSFER:
+            record['Type'] = ['Transfer Out', 'Transfer In']
+            return pd.DataFrame(record)
+        r = 0 if self.record_type == RecordType.EXPENSE else 1
+        return pd.DataFrame(record).iloc[r:r]
