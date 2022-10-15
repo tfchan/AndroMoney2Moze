@@ -46,29 +46,29 @@ class Record:
     @classmethod
     def from_andromoney(cls, record: pd.Series) -> Record:
         print('hello')
-        match record['Category'], record['Amount']:
+        match record["Category"], record["Amount"]:
             case 'SYSTEM', 0:
                 return None
             case 'SYSTEM', _:
-                raise ValueError(f"Account {record['Account']} was created "
+                raise ValueError(f'Account {record["Account"]} was created '
                                  'with initial amount, please make it as'
                                  'an income record with proper date')
 
-        date = pd.to_datetime(record['Date'], '%Y%m%d').date()
-        time = (pd.to_datetime(f"{int(record['Time']):04}", '%H%M').time()
-                if pd.notna(record['Time']) else None)
-        return cls(record['Expense(Transfer Out)'],
-                   record['Income(Transfer In)'],
-                   record['Amount'],
-                   record['Amount'],
-                   record['Currency'],
-                   record['Currency'],
-                   [record['Category'], record['Sub-Category']],
+        date = pd.to_datetime(record["Date"], '%Y%m%d').date()
+        time = (pd.to_datetime(f'{int(record["Time"]):04}', '%H%M').time()
+                if pd.notna(record["Time"]) else None)
+        return cls(record["Expense(Transfer Out)"],
+                   record["Income(Transfer In)"],
+                   record["Amount"],
+                   record["Amount"],
+                   record["Currency"],
+                   record["Currency"],
+                   [record["Category"], record["Sub-Category"]],
                    date,
                    time=time,
-                   shop=record['Payee/Payer'],
-                   detail=record['Remark'],
-                   project=record['Project']
+                   shop=record["Payee/Payer"],
+                   detail=record["Remark"],
+                   project=record["Project"]
                    )
 
     def to_moze(self) -> pd.DataFrame:
@@ -97,7 +97,7 @@ class Record:
         }
 
         if self.record_type == RecordType.TRANSFER:
-            record['Type'] = ['Transfer Out', 'Transfer In']
+            record["Type"] = ['Transfer Out', 'Transfer In']
             return pd.DataFrame(record)
         r = 0 if self.record_type == RecordType.EXPENSE else 1
         return pd.DataFrame(record).iloc[r:r]
