@@ -30,15 +30,18 @@ class Record:
     record_type: RecordType = field(init=False)
 
     def __post_init__(self) -> None:
-        if self.from_account and not self.to_account:
-            self.record_type = RecordType.EXPENSE
-        elif self.from_account and self.to_account:
+        if (not (self.from_account or self.to_account)
+                or not (self.from_amount or self.to_amount)
+                or not (self.from_currency or self.to_currency)):
+            raise ValueError('Both from and to Account/Amount/Currency '
+                             'are None')
+
+        if self.from_account and self.to_account:
             self.record_type = RecordType.TRANSFER
-        elif self.to_account:
-            self.record_type = RecordType.INCOME
+        elif self.from_account:
+            self.record_type = RecordType.EXPENSE
         else:
-            raise ValueError('Invalid record type. '
-                             'Both from_account and to_account are None.')
+            self.record_type = RecordType.INCOME
 
     @classmethod
     def from_andromoney(cls, record: pd.Series) -> Record:
