@@ -82,7 +82,7 @@ class Record:
             'Currency': [self.from_currency, self.to_currency],
             'Type': ['Expense', 'Income'],
             'Main Category': [self.categories[0]] * 2,
-            'Subcategory': [self.categories[-1]] * 2,
+            'Subcategory': [self.categories[1]] * 2,
             'Price': [-self.from_amount, self.to_amount],
             'Fee': [pd.NA] * 2,
             'Bonus': [pd.NA] * 2,
