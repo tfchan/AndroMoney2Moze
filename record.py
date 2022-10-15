@@ -45,6 +45,15 @@ class Record:
 
     @classmethod
     def from_andromoney(cls, record: pd.Series) -> Record:
+        print('hello')
+        match record['Category'], record['Amount']:
+            case 'SYSTEM', 0:
+                return None
+            case 'SYSTEM', _:
+                raise ValueError(f"Account {record['Account']} was created "
+                                 'with initial amount, please make it as'
+                                 'an income record with proper date')
+
         date = pd.to_datetime(record['Date'], '%Y%m%d').date()
         time = (pd.to_datetime(f"{int(record['Time']):04}", '%H%M').time()
                 if pd.notna(record['Time']) else None)
