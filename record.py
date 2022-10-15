@@ -1,7 +1,8 @@
 from __future__ import annotations  # Fix annotation error of returning Record
+
 import datetime
-from enum import Enum
 from dataclasses import dataclass, field
+from enum import Enum
 
 import pandas as pd
 
