@@ -1,3 +1,4 @@
+from __future__ import annotations  # Fix annotation error of returning Record
 import datetime
 from enum import Enum
 from dataclasses import dataclass, field
@@ -40,7 +41,7 @@ class Record:
                              'Both from_account and to_account are None.')
 
     @classmethod
-    def from_andromoney(cls, record: pd.Series) -> None:
+    def from_andromoney(cls, record: pd.Series) -> Record:
         date = pd.to_datetime(record['Date'], '%Y%m%d').date()
         time = (pd.to_datetime(f"{int(record['Time']):04}", '%H%M').time()
                 if pd.notna(record['Time']) else None)
