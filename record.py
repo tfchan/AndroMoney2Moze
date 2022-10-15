@@ -45,7 +45,6 @@ class Record:
 
     @classmethod
     def from_andromoney(cls, record: pd.Series) -> Record:
-        print('hello')
         match record["Category"], record["Amount"]:
             case 'SYSTEM', 0:
                 return None
