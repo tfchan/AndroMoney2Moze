@@ -1,6 +1,8 @@
 import click
 import pandas as pd
 
+import record
+
 DEFAULT_ANDROMONEY_FILE = 'AndroMoney - AndroMoney.csv'
 DEFAULT_MOZE_FILE = 'MOZE.csv'
 
@@ -9,8 +11,23 @@ def read_andromoney(filename: click.Path) -> pd.DataFrame:
     return pd.read_csv(filename, skiprows=1)
 
 
-def _andromoney2moze(andromoney: pd.DataFrame) -> pd.DataFrame:
-    pass
+def fix_account_init_record(andromoney: pd.DataFrame,
+                            main_category: str = 'INIT',
+                            sub_category: str = 'INIT'
+                            ) -> pd.DataFrame:
+    andromoney = andromoney.copy()
+    is_system_row = andromoney["Category"] == 'SYSTEM'
+    andromoney.loc[is_system_row, "Category"] = main_category
+    andromoney.loc[is_system_row, "Sub-Category"] = sub_category
+    andromoney.loc[is_system_row, "Date"] = pd.NA
+    andromoney.loc[is_system_row, "Time"] = 0
+    andromoney["Date"] = andromoney["Date"].ffill().bfill()
+
+    return andromoney
+
+
+def andromoney_to_moze(andromoney: pd.DataFrame) -> pd.DataFrame:
+    andromoney = fix_account_init_record(andromoney)
 
 
 def write_moze(moze: pd.DataFrame):
@@ -33,7 +50,7 @@ def write_moze(moze: pd.DataFrame):
 def andromoney2moze(input: click.Path, output: click.Path):
     """A tool for converting AndroMoney format into Moze one."""
     andromoney = read_andromoney(input)
-    moze = _andromoney2moze(andromoney)
+    moze = andromoney_to_moze(andromoney)
     write_moze(moze)
 
 
