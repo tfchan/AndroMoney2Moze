@@ -16,7 +16,8 @@ def fix_account_init_record(andromoney: pd.DataFrame,
                             sub_category: str = 'INIT'
                             ) -> pd.DataFrame:
     andromoney = andromoney.copy()
-    is_system_row = andromoney["Category"] == 'SYSTEM'
+    is_system_row = ((andromoney["Category"] == 'SYSTEM')
+                     & (andromoney["Amount"] != 0))
     andromoney.loc[is_system_row, "Category"] = main_category
     andromoney.loc[is_system_row, "Sub-Category"] = sub_category
     andromoney.loc[is_system_row, "Date"] = pd.NA
@@ -29,10 +30,9 @@ def fix_account_init_record(andromoney: pd.DataFrame,
 def andromoney_to_moze(andromoney: pd.DataFrame) -> pd.DataFrame:
     andromoney = fix_account_init_record(andromoney)
     andromoney = andromoney.sort_values(["Date", "Time"], ignore_index=True)
-    records = (andromoney
-               .apply(record.Record.from_andromoney, axis=1)
-               .map(lambda record: record.to_moze()))
-    moze = pd.concat(record for record in records)
+    records = andromoney.apply(record.Record.from_andromoney, axis=1)
+    moze = pd.concat(record.to_moze() for record in records
+                     if record is not None)
     return moze
 
 
