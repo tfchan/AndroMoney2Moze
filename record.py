@@ -1,10 +1,17 @@
 from __future__ import annotations  # Fix annotation error of returning Record
 
 import datetime
+import warnings
 from dataclasses import dataclass, field
 from enum import Enum
 
 import pandas as pd
+
+
+DIFFERENT_CURRENCY_WARNING = ('Pleass be aware that AndroMoney does not '
+                              'preserve the amount you received when'
+                              'transfering between different currency, '
+                              'you have to manually adjust it.')
 
 
 class RecordType(Enum):
@@ -46,6 +53,7 @@ class Record:
 
     @classmethod
     def from_andromoney(cls, record: pd.Series) -> Record:
+        warnings.warn(DIFFERENT_CURRENCY_WARNING)
         match record["Category"], record["Amount"]:
             case 'SYSTEM', 0:
                 return None
