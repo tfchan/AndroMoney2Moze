@@ -63,9 +63,9 @@ class Record:
                                  'make it as an income record with proper '
                                  'date')
 
-        date = pd.to_datetime(record["Date"], '%Y%m%d').date()
-        time = (pd.to_datetime(f'{int(record["Time"]):04}', '%H%M').time()
-                if pd.notna(record["Time"]) else None)
+        date = pd.to_datetime(record["Date"], format='%Y%m%d').date()
+        time = (pd.to_datetime(f'{int(record["Time"]):04}', format='%H%M')
+                .time() if pd.notna(record["Time"]) else None)
         return cls(record["Expense(Transfer Out)"],
                    record["Income(Transfer In)"],
                    record["Amount"],
