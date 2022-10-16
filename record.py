@@ -58,9 +58,10 @@ class Record:
             case 'SYSTEM', 0:
                 return None
             case 'SYSTEM', _:
-                raise ValueError(f'Account {record["Account"]} was created '
-                                 'with initial amount, please make it as'
-                                 'an income record with proper date')
+                raise ValueError(f'Account {record["Income(Transfer In)"]} '
+                                 'was created with initial amount, please '
+                                 'make it as an income record with proper '
+                                 'date')
 
         date = pd.to_datetime(record["Date"], '%Y%m%d').date()
         time = (pd.to_datetime(f'{int(record["Time"]):04}', '%H%M').time()
