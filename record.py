@@ -39,7 +39,7 @@ class Record:
 
     def __post_init__(self) -> None:
         if (not (self.from_account or self.to_account)
-                or not (self.from_amount or self.to_amount)
+                or (self.from_amount is None and self.to_amount is None)
                 or not (self.from_currency or self.to_currency)):
             raise ValueError('Both from and to Account/Amount/Currency '
                              'are None')
