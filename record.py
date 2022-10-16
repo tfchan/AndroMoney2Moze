@@ -24,8 +24,8 @@ class RecordType(Enum):
 class Record:
     from_account: str
     to_account: str
-    from_amount: int
-    to_amount: int
+    from_amount: float
+    to_amount: float
     from_currency: str
     to_currency: str
     categories: list[str]
