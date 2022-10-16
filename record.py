@@ -54,6 +54,7 @@ class Record:
     @classmethod
     def from_andromoney(cls, record: pd.Series) -> Record:
         warnings.warn(DIFFERENT_CURRENCY_WARNING)
+        record = record.replace(pd.NA, None)
         match record["Category"], record["Amount"]:
             case 'SYSTEM', 0:
                 return None
