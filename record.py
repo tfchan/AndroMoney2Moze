@@ -83,7 +83,8 @@ class Record:
         if self.record_type not in [RecordType.EXPENSE,
                                     RecordType.INCOME,
                                     RecordType.TRANSFER]:
-            raise ValueError(f'Do not support {self.record_type}')
+            raise ValueError(f'Conversion of {self.record_type} Record'
+                             'to Moze is not supported')
 
         record = {
             'Account': [self.from_account, self.to_account],
