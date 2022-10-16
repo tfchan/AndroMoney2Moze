@@ -35,8 +35,8 @@ def andromoney_to_moze(andromoney: pd.DataFrame) -> pd.DataFrame:
     return moze
 
 
-def write_moze(moze: pd.DataFrame):
-    pass
+def write_moze(moze: pd.DataFrame, filename: str):
+    moze.to_csv(filename, index=False)
 
 
 @click.command()
@@ -56,7 +56,7 @@ def andromoney2moze(input: click.Path, output: click.Path):
     """A tool for converting AndroMoney format into Moze one."""
     andromoney = read_andromoney(input)
     moze = andromoney_to_moze(andromoney)
-    write_moze(moze)
+    write_moze(moze, output)
 
 
 if __name__ == '__main__':
