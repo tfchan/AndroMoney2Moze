@@ -42,7 +42,7 @@ class Record:
                 or (self.from_amount is None and self.to_amount is None)
                 or not (self.from_currency or self.to_currency)):
             raise ValueError('Both from and to Account/Amount/Currency '
-                             'are None')
+                             'are None or empty')
 
         if self.from_account and self.to_account:
             self.record_type = RecordType.TRANSFER
