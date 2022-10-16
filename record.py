@@ -111,4 +111,4 @@ class Record:
             record["Type"] = ['Transfer Out', 'Transfer In']
             return pd.DataFrame(record)
         r = 0 if self.record_type == RecordType.EXPENSE else 1
-        return pd.DataFrame(record).iloc[r:r]
+        return pd.DataFrame(record).iloc[r:r + 1]
