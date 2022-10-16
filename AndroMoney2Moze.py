@@ -28,6 +28,7 @@ def fix_account_init_record(andromoney: pd.DataFrame,
 
 def andromoney_to_moze(andromoney: pd.DataFrame) -> pd.DataFrame:
     andromoney = fix_account_init_record(andromoney)
+    andromoney = andromoney.sort_values(["Date", "Time"], ignore_index=True)
     records = (andromoney
                .apply(record.Record.from_andromoney, axis=1)
                .map(lambda record: record.to_moze()))
