@@ -23,16 +23,14 @@ def fix_account_init_record(andromoney: pd.DataFrame,
     andromoney.loc[is_system_row, "Date"] = pd.NA
     andromoney.loc[is_system_row, "Time"] = 0
     andromoney["Date"] = andromoney["Date"].ffill().bfill()
-
     return andromoney
 
 
 def andromoney_to_moze(andromoney: pd.DataFrame) -> pd.DataFrame:
-    andromoney = fix_account_init_record(andromoney)
-    andromoney = andromoney.sort_values(["Date", "Time"], ignore_index=True)
-    records = andromoney.apply(record.Record.from_andromoney, axis=1)
-    moze = pd.concat(record.to_moze() for record in records
-                     if record is not None)
+    records = (fix_account_init_record(andromoney)
+               .sort_values(["Date", "Time"], ignore_index=True)
+               .apply(record.Record.from_andromoney, axis=1))
+    moze = pd.concat(record.to_moze() for record in records if record)
     return moze
 
 
